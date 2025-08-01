@@ -1,0 +1,52 @@
+CREATE TABLE entities (
+	entity_id INT AUTO_INCREMENT PRIMARY KEY,
+	entity_name VARCHAR(255),
+	code VARCHAR(50)
+);
+
+CREATE TABLE infectious_normalized (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	entity_id INT,
+	year INT,
+	number_yaws INT,
+	polio_cases INT,
+	guinea_worm_cases INT,
+	number_rabies FLOAT,
+	number_malaria FLOAT,
+	number_hiv FLOAT,
+	number_tuberculosis FLOAT,
+	number_smallpox INT,
+	number_cholera_cases INT,
+	FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
+
+INSERT INTO entities (entity_name, code)
+SELECT DISTINCT Entity, Code FROM infectious_cases;
+
+INSERT INTO infectious_normalized (
+	entity_id,
+	year,
+	number_yaws,
+	polio_cases,
+	guinea_worm_cases,
+	number_rabies,
+	number_malaria,
+	number_hiv,
+	number_tuberculosis,
+	number_smallpox,
+	number_cholera_cases
+)
+SELECT 
+	e.entity_id,
+	ic.Year,
+	NULLIF(ic.Number_yaws, '') AS number_yaws,
+	ic.polio_cases,
+	ic.cases_guinea_worm,
+	NULLIF(ic.Number_rabies, '') AS number_rabies,
+	NULLIF(ic.Number_malaria, '') AS number_malaria,
+	NULLIF(ic.Number_hiv, '') AS number_hiv,
+	NULLIF(ic.Number_tuberculosis, '') AS number_tuberculosis,
+	NULLIF(ic.Number_smallpox, '') AS number_smallpox,
+	NULLIF(ic.Number_cholera_cases, '') AS number_cholera_cases
+FROM infectious_cases ic
+JOIN entities e ON ic.Entity = e.entity_name AND ic.Code = e.code;

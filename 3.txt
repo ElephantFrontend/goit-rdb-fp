@@ -1,0 +1,13 @@
+SELECT 
+	e.entity_name,
+	e.code,
+	AVG(inor.number_rabies) AS avg_rabies,
+	MIN(inor.number_rabies) AS min_rabies,
+	MAX(inor.number_rabies) AS max_rabies,
+	SUM(inor.number_rabies) AS total_rabies
+FROM infectious_normalized inor
+JOIN entities e ON inor.entity_id = e.entity_id
+WHERE inor.number_rabies IS NOT NULL
+GROUP BY e.entity_name, e.code
+ORDER BY avg_rabies DESC
+LIMIT 10;

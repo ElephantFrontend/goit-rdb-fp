@@ -1,0 +1,7 @@
+SELECT 
+	id,
+	year,
+	DATE(CONCAT(year, '-01-01')) AS year_date,
+	CURRENT_DATE() AS c_date,
+	TIMESTAMPDIFF(YEAR, DATE(CONCAT(year, '-01-01')), CURRENT_DATE()) AS year_diff
+FROM infectious_normalized;

@@ -1,0 +1,20 @@
+DROP FUNCTION IF EXISTS year_diff;
+
+DELIMITER //
+
+CREATE FUNCTION year_diff(input_year INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	RETURN TIMESTAMPDIFF(YEAR, DATE(CONCAT(input_year, '-01-01')), CURRENT_DATE());
+END //
+
+
+DELIMITER ;
+
+
+SELECT 
+	id, 
+	year, 
+	year_diff(year) AS year_difference
+FROM infectious_normalized;
